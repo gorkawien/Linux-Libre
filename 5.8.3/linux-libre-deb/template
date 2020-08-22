@@ -1,0 +1,28 @@
+# Template file for 'linux-libre-deb'
+pkgname=linux-libre-deb
+version=5.8.3
+revision=1
+_subversion=1.0
+archs="x86_64"
+hostmakedepends="tar binutils xz"
+short_desc="Liberated Linux-libre kernel without non-free binary blobs"
+maintainer="reback00 <reback00@protonmail.com>"
+license="GPL-2.0-only"
+homepage="https://www.fsfla.org/ikiwiki/selibre/linux-libre/"
+# Got from: https://linux-libre.fsfla.org/pub/linux-libre/freesh/pool/main/l/linux-libre/
+distfiles="https://linux-libre.fsfla.org/pub/linux-libre/freesh/pool/main/l/linux-${version}-gnu/linux-image-${version}-gnu_${version}-gnu-${_subversion}_amd64.deb"
+checksum=e1c1bf61e2a4319cbc70b092daa390b2470810bd85991f7569deb6aa9cab92c8
+
+_kernver="${version}-gnu"
+triggers="kernel-hooks"
+kernel_hooks_version="${_kernver}"
+
+do_extract() {
+	mkdir -p ${DESTDIR}
+	ar x ${XBPS_SRCDISTDIR}/${pkgname}-${version}/linux-image-${version}-gnu_${version}-gnu-${_subversion}_amd64.deb
+}
+
+do_install() {
+	tar xf data.tar.xz -C ${DESTDIR}
+	mv -v ${DESTDIR}/lib ${DESTDIR}/usr/lib
+}
